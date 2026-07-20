@@ -18,7 +18,7 @@ import { authenticate, authorize } from '../Middlewares/index.js';
 const router = express.Router();
 
 // All user management routes require valid authentication
-// router.use(authenticate);
+router.use(authenticate);
 
 // 1. Profile route (Any authenticated user can view their own profile)
 router.get('/profile', getProfile);
@@ -28,7 +28,7 @@ router.get('/profile', getProfile);
 router.put('/change-password', authorize(['ADMIN']), changePassword);
 
 // 3. User CRUD routes (Admin only)
-router.post('/', createUser);
+router.post('/', authorize(['ADMIN']), createUser);
 router.get('/',authorize(['ADMIN']), getAllUsers);
 router.get('/:id', authorize(['ADMIN']), getUserById);
 router.put('/:id', updateUser);
