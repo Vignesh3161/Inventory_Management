@@ -121,7 +121,9 @@ export const validateBarcode = async (req, res, next) => {
       });
     }
 
-    const product = await Product.findOne({ barcode, isDeleted: { $ne: true } });
+    const product = await Product.findOne({ barcode, isDeleted: { $ne: true } })
+      .populate('brandId')
+      .populate('categoryId');
 
     if (!product) {
       return res.status(200).json({
@@ -140,7 +142,8 @@ export const validateBarcode = async (req, res, next) => {
       Message: 'Barcode validation completed.',
       Result: {
         valid: true,
-        message: 'Barcode found.'
+        message: 'Barcode found.',
+        product
       },
       StatusCode: 200
     });
